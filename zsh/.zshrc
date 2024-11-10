@@ -32,6 +32,12 @@ if command -v fzf >/dev/null 2>&1; then
     setopt appendhistory
 fi
 
+if command -v lazygit >/dev/null 2>&1; then
+    alias g="lazygit"
+fi
+
+alias nv="nvim"
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+source /Users/cartrabbit/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
