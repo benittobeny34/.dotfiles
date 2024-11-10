@@ -41,3 +41,5 @@ alias nv="nvim"
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 source /Users/cartrabbit/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+alias ben="bash /Users/cartrabbit/.tmux/create-sessions.sh"
