@@ -37,6 +37,12 @@ if command -v lazygit >/dev/null 2>&1; then
 fi
 
 alias nv="nvim"
+alias home="cd $HOME"
+alias dotfiles='cd $HOME/.dotfiles && nv .'
+
+open-at-line() {
+    nv $(rg --line-number . | fzf --delimiter ':' --preview 'bat --color=always --highlight-line {2} {1}' | awk -F ':' '{print "+"$2" "$1}')
+}
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
