@@ -26,3 +26,6 @@ keymap.set("n", "<leader>u", "<cmd>UndotreeToggle<CR>", { desc = "Open Undo tree
 --move line using visual mode
 keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move the line to below" })
 keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move the line to above" })
+
+--delete & paste and preserve the previous yank
+keymap.set("x", "<leader>p", '"_dP', { desc = "Delete and paste" })

@@ -40,6 +40,14 @@ alias nv="nvim"
 alias home="cd $HOME"
 alias dotfiles='cd $HOME/.dotfiles && nv .'
 
+#tmuxifier
+export PATH="$HOME/.tmuxifier/bin:$PATH"
+eval "$(tmuxifier init -)"
+
+if ! tmux ls &>/dev/null; then
+    tmux start-server
+fi
+
 open-at-line() {
     nv $(rg --line-number . | fzf --delimiter ':' --preview 'bat --color=always --highlight-line {2} {1}' | awk -F ':' '{print "+"$2" "$1}')
 }
@@ -49,3 +57,7 @@ open-at-line() {
 source /Users/cartrabbit/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 alias ben="bash /Users/cartrabbit/.tmux/create-sessions.sh"
+export PATH="/Users/cartrabbit/.config/herd-lite/bin:$PATH"
+export PHP_INI_SCAN_DIR="/Users/cartrabbit/.config/herd-lite/bin:$PHP_INI_SCAN_DIR"
+
+
