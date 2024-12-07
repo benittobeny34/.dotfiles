@@ -151,19 +151,6 @@ return {
 				})
 			end,
 
-			["phpactor"] = function()
-				-- Configure PHPactor language server
-				lspconfig["phpactor"].setup({
-					capabilities = capabilities,
-					root_dir = function()
-						return vim.loop.cwd() -- Use Neovim's current directory
-					end,
-					on_attach = function(client, bufnr)
-						-- Add any additional setup for PHPactor here if needed
-					end,
-				})
-			end,
-
 			["lua_ls"] = function()
 				-- configure lua server (with special settings)
 				lspconfig["lua_ls"].setup({
