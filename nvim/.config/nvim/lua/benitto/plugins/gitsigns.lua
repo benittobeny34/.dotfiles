@@ -33,6 +33,8 @@ return {
 				-- map("n", "<leader>hu", gs.undo_stage_hunk, "Undo stage hunk")
 
 				map("n", "<leader>hp", gs.preview_hunk, "Preview hunk")
+				map("n", "gh", "<cmd>diffget //2<CR>", "Get Left Changes")
+				map("n", "gl", "<cmd>diffget //3<CR>", "Get Right Changes")
 
 				map("n", "<leader>hb", function()
 					gs.blame_line({ full = true })

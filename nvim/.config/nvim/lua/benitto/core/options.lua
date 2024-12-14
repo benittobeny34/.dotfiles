@@ -33,13 +33,16 @@ opt.clipboard:append("unnamedplus") -- use system clipboard as default register
 opt.splitright = true -- split vertical windw to the right
 opt.splitbelow = true -- split horizontal windw to the bottom
 
---treate php files as html file as well so we can add html tags not yet confirmed whether it's working or not
--- vim.cmd([[
---   autocmd FileType php setlocal filetype=php.html
--- ]])
---
 -- In order to work below command php-cs-fixer must be installed in our system
 vim.api.nvim_create_user_command("FixPHP", function()
 	local file_path = vim.fn.expand("%:p") -- Get the full path of the current file
 	vim.cmd("!php-cs-fixer fix " .. file_path .. " --dry-run") -- Run php-cs-fixer on the current file
 end, {})
+
+vim.api.nvim_create_autocmd("TextYankPost", {
+	desc = "Highlight whenyanking (copying) text",
+	group = vim.api.nvim_create_augroup("hightligh-on-yank", { clear = true }),
+	callback = function()
+		vim.highlight.on_yank()
+	end,
+})
