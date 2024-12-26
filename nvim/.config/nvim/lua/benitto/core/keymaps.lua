@@ -29,3 +29,11 @@ keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move the line to above" })
 
 --delete & paste and preserve the previous yank
 keymap.set("x", "<leader>p", '"_dP', { desc = "Delete and paste" })
+
+--open a new terminal at the bottom
+keymap.set("n", "<leader>st", function()
+	vim.cmd.vnew()
+	vim.cmd.term()
+	vim.cmd.wincmd("J")
+	vim.api.nvim_win_set_height(0, 15)
+end)

@@ -37,6 +37,8 @@ if command -v lazygit >/dev/null 2>&1; then
 fi
 
 alias nv="nvim"
+alias vim="nvim"
+alias vi="nvim"
 alias home="cd $HOME"
 alias dotfiles='cd $HOME/.dotfiles && nv .'
 
@@ -56,7 +58,7 @@ open-at-line() {
 
 source /Users/cartrabbit/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-alias ben="bash /Users/cartrabbit/.tmux/create-sessions.sh"
+alias ben="tmuxifier load-session"
 export PATH="/Users/cartrabbit/.config/herd-lite/bin:$PATH"
 export PHP_INI_SCAN_DIR="/Users/cartrabbit/.config/herd-lite/bin:$PHP_INI_SCAN_DIR"
 
