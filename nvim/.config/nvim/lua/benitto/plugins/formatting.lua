@@ -46,6 +46,7 @@ return {
 				mysql = { "sqlfmt" },
 				psql = { "sqlfmt" }, -- PostgreSQL
 				sqlite = { "sqlfmt" },
+				go = { "gofmt" },
 				php = {
 					command = "php-cs-fixer",
 					args = function()

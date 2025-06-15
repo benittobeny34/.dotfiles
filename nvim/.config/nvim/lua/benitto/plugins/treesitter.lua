@@ -48,6 +48,7 @@ return {
 				"c",
 				"php",
 				"phpdoc",
+				"go",
 			},
 			incremental_selection = {
 				enable = true,

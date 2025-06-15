@@ -36,6 +36,7 @@ return {
 				"emmet_ls",
 				"prismals",
 				"intelephense",
+				"gopls",
 			},
 		})
 
@@ -46,6 +47,8 @@ return {
 				"black", -- python formatter
 				"pylint", -- python linter
 				"eslint_d", --js linter
+				"gopls",
+				"delve",
 			},
 		})
 	end,

@@ -40,7 +40,10 @@ alias nv="nvim"
 alias vim="nvim"
 alias vi="nvim"
 alias home="cd $HOME"
+alias ct="bash $HOME/.dotfiles/scripts/ct.sh"
 alias dotfiles='cd $HOME/.dotfiles && nv .'
+alias f='fzf | pbcopy'
+alias gr='go run main.go'
 
 #tmuxifier
 export PATH="$HOME/.tmuxifier/bin:$PATH"
@@ -62,4 +65,12 @@ alias ben="tmuxifier load-session"
 export PATH="/Users/cartrabbit/.config/herd-lite/bin:$PATH"
 export PHP_INI_SCAN_DIR="/Users/cartrabbit/.config/herd-lite/bin:$PHP_INI_SCAN_DIR"
 
+export PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:$GOPATH/bin
 
+export EDITOR=nvim
+
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

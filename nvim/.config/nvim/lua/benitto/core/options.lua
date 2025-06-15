@@ -11,7 +11,9 @@ opt.shiftwidth = 4 -- 4 spaces for indent width
 opt.expandtab = true -- expand tab to spaces
 opt.autoindent = true -- copy indent from current line when starting new one
 
-opt.wrap = false
+opt.wrap = true
+opt.textwidth = 80
+opt.colorcolumn = "81" -- highlight the 81th column
 
 --Search Settings
 opt.ignorecase = true -- ignore case when searching
@@ -47,10 +49,10 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
-vim.api.nvim_create_autocmd("TermOpen", {
-	group = vim.api.nvim_create_augroup("custom-term-open", { clear = true }),
-	callback = function()
-		vim.opt.number = false
-		vim.opt.relativenumber = false
-	end,
-})
+-- vim.api.nvim_create_autocmd("TermOpen", {
+-- 	group = vim.api.nvim_create_augroup("custom-term-open", { clear = true }),
+-- 	callback = function()
+-- 		vim.opt.number = false
+-- 		vim.opt.relativenumber = false
+-- 	end,
+-- })
