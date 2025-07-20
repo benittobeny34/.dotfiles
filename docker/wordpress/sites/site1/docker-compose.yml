@@ -1,0 +1,61 @@
+version: "3"
+
+services:
+  db:
+    image: mysql:5.7
+    platform: linux/x86_64
+    ports:
+      - "${DB_PORT}:3306"
+    volumes:
+      - yuko_db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - app
+
+  wordpress:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    volumes:
+      - ./:/var/www/html
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    networks:
+      - web
+      - app
+    environment:
+      WORDPRESS_DB_HOST: ${WP_DB_HOST} # Usually "db:3306"
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      WP_SITE_URL: http://${SITE_SLUG}.localhost
+      WP_TITLE: ${WP_TITLE}
+      WP_ADMIN_USER: ${WP_ADMIN_USER}
+      WP_ADMIN_PASSWORD: ${WP_ADMIN_PASSWORD}
+      WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL}
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${SITE_SLUG}-http.rule=Host(`${SITE_SLUG}.localhost`)"
+      - "traefik.http.routers.${SITE_SLUG}-http.entrypoints=web"
+      - "traefik.http.routers.${SITE_SLUG}-http.middlewares=redirect-to-https"
+
+      - "traefik.http.routers.${SITE_SLUG}.rule=Host(`${SITE_SLUG}.localhost`)"
+      - "traefik.http.routers.${SITE_SLUG}.entrypoints=websecure"
+      - "traefik.http.routers.${SITE_SLUG}.tls=true"
+      - "traefik.http.services.${SITE_SLUG}.loadbalancer.server.port=80"
+
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+
+volumes:
+  yuko_db:
+
+networks:
+  web:
+    external: true
+  app:
