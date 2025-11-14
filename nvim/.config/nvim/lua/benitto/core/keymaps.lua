@@ -30,41 +30,53 @@ keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move the line to above" })
 --delete & paste and preserve the previous yank
 keymap.set("x", "<leader>p", '"_dP', { desc = "Delete and paste" })
 
-vim.api.nvim_set_keymap(
-	"n",
-	"<C-@>",
-	[[:silent !osascript -e 'tell application "Google Chrome" to activate' >/dev/null 2>&1<CR>]],
-	{ noremap = true, silent = true }
-)
+keymap.set("n", "<leader>gm", ":G mergetool<CR>", { desc = "Open Gvdiffsplit for merge conflicts" })
 
-vim.api.nvim_set_keymap(
-	"n",
-	"<C-#>",
-	[[:silent !osascript -e 'tell application "Slack" to activate' >/dev/null 2>&1<CR>]],
-	{ noremap = true, silent = true }
-)
+-- Accept "ours" version (left) in merge
+keymap.set("n", "<leader>co", ":diffget //2<CR>", { desc = "Accept Ours in merge" })
+-- Accept "theirs" version (right) in merge
+keymap.set("n", "<leader>ct", ":diffget //3<CR>", { desc = "Accept Theirs in merge" })
 
-vim.api.nvim_set_keymap(
-	"n",
-	"<C-$>",
-	[[:silent !osascript -e 'tell application "Tableplus" to activate' >/dev/null 2>&1<CR>]],
-	{ noremap = true, silent = true }
-)
+keymap.set("n", "<leader>cb", function()
+	-- Yank theirs (right side) hunk
+	vim.cmd("diffget //3")
+	vim.cmd('normal! vip"ty') -- visually select hunk and yank
+	vim.cmd("undo") -- undo back to ours
+	vim.cmd("diffget //2") -- apply ours
+	vim.cmd('normal! "tp') -- paste theirs after ours
+	print("Merged both ours and theirs")
+end, { desc = "Manually merge both ours and theirs" })
 
-vim.api.nvim_set_keymap(
-	"n",
-	"<C-%>",
-	[[:silent !osascript -e 'tell application "Postman" to activate' >/dev/null 2>&1<CR>]],
-	{ noremap = true, silent = true }
-)
+keymap.set("n", "<leader>gw", function()
+	vim.cmd(":w")
+	-- Turn off diff mode in all windows
+	vim.cmd("diffoff!")
 
-vim.api.nvim_set_keymap(
-	"n",
-	"<C-)>",
-	[[:silent !osascript -e 'tell application "Tinkerwell" to activate' >/dev/null 2>&1<CR>]],
-	{ noremap = true, silent = true }
-)
+	-- Close all three windows
+	vim.cmd("wincmd o") -- keep only the current window
 
+	print("Saved and closed Gvdiffsplit")
+end, { desc = "Mark current file resolved and stage" })
+
+keymap.set("n", "<leader>gd", function()
+	-- Discard changes in all diff buffers
+	vim.cmd("silent! bufdo e!") -- reload all buffers, discarding unsaved changes
+
+	-- Turn off diff mode in all windows
+	vim.cmd("diffoff!")
+
+	-- Close all three windows
+	vim.cmd("wincmd o") -- keep only the current window
+
+	print("Discarded all changes and closed Gvdiffsplit")
+end, { desc = "Discard merge changes and close all Gvdiffsplit windows" })
+
+keymap.set("n", "<leader>gn", function()
+	local ok = pcall(vim.cmd, "/=======")
+	if not ok then
+		print("No more conflict separators found 👌")
+	end
+end, { desc = "Jump to next Git conflict separator =======" })
 --open a new terminal at the bottom
 -- keymap.set("n", "<leader>st", function()
 -- 	vim.cmd.vnew()

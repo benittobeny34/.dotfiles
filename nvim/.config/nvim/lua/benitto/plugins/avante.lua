@@ -5,6 +5,7 @@ return {
 	build = "make",
 	event = "VeryLazy",
 	version = false, -- Never set this value to "*"! Never!
+	enabled = true,
 	---@module 'avante'
 	---@type avante.Config
 	opts = {
@@ -37,6 +38,9 @@ return {
 		windows = {
 			width = 40, -- default % based on available width
 			ask = {
+				confirm = false, -- confirm before applying changes
+
+				confirm_apply = false, -- disables the annoying confirmation prompt
 				floating = true, -- Open the 'AvanteAsk' prompt in a floating window
 				start_insert = true, -- Start insert mode when opening the ask window
 				border = "rounded",

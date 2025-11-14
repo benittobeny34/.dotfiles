@@ -70,7 +70,41 @@ export PATH=$PATH:$GOPATH/bin
 
 export EDITOR=nvim
 
+export $(grep -v '^#' ~/.dotfiles/.env | xargs)
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export PATH="/opt/homebrew/opt/php@7.4/bin:$PATH"
+export PATH="/opt/homebrew/opt/php@7.4/sbin:$PATH"
+
+bindkey -v
+# Bind '/' to history search (like Vim's /)
+
+bindkey -M vicmd '/' vi-history-search-backward
+bindkey -M vicmd '?' vi-history-search-forward
+
+# function zle-keymap-select {
+#   if [[ $KEYMAP == vicmd ]]; then
+#     echo -ne "\033]0;-- NORMAL --\007"
+#   else
+#     echo -ne "\033]0;\007"
+#   fi
+# }
+# zle -N zle-keymap-select
+
+function zle-keymap-select {
+  case $KEYMAP in
+    vicmd) MODE_INDICATOR="%F{blue}[NORMAL]%f" ;;
+    viins|main) MODE_INDICATOR="%F{green}[INSERT]%f" ;;
+  esac
+  zle reset-prompt
+}
+zle -N zle-keymap-select
+
+precmd() { MODE_INDICATOR="%F{yellow}[CMD]%f" }
+
+# Add the indicator to your prompt
+PROMPT='${MODE_INDICATOR} %F{cyan}%~%f %# '
+
+

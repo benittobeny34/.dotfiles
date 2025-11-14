@@ -4,6 +4,7 @@ local opt = vim.opt
 
 opt.relativenumber = true
 opt.number = true
+opt.laststatus = 4
 
 --Tabs & Indentation
 opt.tabstop = 4 --4 spaces for tabs
@@ -49,6 +50,9 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
+vim.api.nvim_create_user_command("Conflicts", function()
+	vim.cmd("Gvdiffsplit!") -- triggers Fugitive merge tool for current file
+end, { desc = "Open current file in Fugitive mergetool" })
 -- vim.api.nvim_create_autocmd("TermOpen", {
 -- 	group = vim.api.nvim_create_augroup("custom-term-open", { clear = true }),
 -- 	callback = function()
