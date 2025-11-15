@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # Install script: Installs required packages and sets up the environment
@@ -46,9 +45,16 @@ brew install ripgrep
 brew install bat
 brew install git
 
+# Install dependencies
+brew install go        # Install Go
+brew install node      # Install Node.js
+brew install lazygit   # Install Lazygit
+brew install spellcheck # Install Spellcheck
+brew install composer #install composer
+
 # Use stow to manage dotfiles if directories are prepared
-if [ -d "$HOME/dotfiles" ]; then
-    cd "$HOME/dotfiles" || exit
+if [ -d "$HOME/.dotfiles" ]; then
+    cd "$HOME/.dotfiles" || exit
     stow git
     stow nvim
     stow tmux

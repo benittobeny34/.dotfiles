@@ -1,30 +1,43 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
+# --- Powerlevel10k instant prompt ---
+# Should stay close to the top of ~/.zshrc
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-plugins=(
-    # other plugins...
-    zsh-autosuggestions
-    wp-cli
-)
+# --- Oh My Zsh ---
+export ZSH="$HOME/.oh-my-zsh"
+plugins=(zsh-autosuggestions wp-cli)
+source $ZSH/oh-my-zsh.sh
 
-export PATH=/opt/homebrew/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin
+# --- PATH ---
 export PATH=/opt/homebrew/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin
 export PATH=$PATH:$HOME/nvim-macos-x86_64/bin
+export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+export PATH="$HOME/.tmuxifier/bin:$PATH"
+export PATH="/opt/homebrew/opt/php@7.4/bin:/opt/homebrew/opt/php@7.4/sbin:$PATH"
+
+# --- Powerlevel10k theme ---
 source ~/powerlevel10k/powerlevel10k.zsh-theme
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# --- Editor ---
+export EDITOR=nvim
 
+# --- Load environment variables safely (after instant prompt) ---
+[[ -f ~/.dotfiles/.env ]] && export $(grep -v '^#' ~/.dotfiles/.env | xargs)
+
+# --- NVM ---
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# --- fzf & bat integrations ---
 if command -v fzf >/dev/null 2>&1; then
-    if command -v bat >/dev/null 2>&1; then        
+    if command -v bat >/dev/null 2>&1; then
         alias fzf="fzf --preview 'bat --color=always --style=header,grid --line-range :500 {}'"
     fi
-    #find directory in the current directory without hidden directories
     alias fdr='cd "$(find . -type d \( -path "*/.git" -o -name "node_modules" -o -name "vendor" -o -name ".idea" -o -name ".next" \) -prune -o \( -type d ! -name ".*" \) -print | fzf)"'
     alias fdc='cd ~/code && cd "$(find . -type d \( -path "*/.git" -o -name "node_modules" -o -name "vendor" -o -name ".idea" -o -name ".next" \) -prune -o \( -type d ! -name ".*" \) -print | fzf)"'
-    #CTRL+R for recent history list
     source <(fzf --zsh)
     HISTFILE=~/.zsh_history
     HISTSIZE=10000
@@ -32,10 +45,12 @@ if command -v fzf >/dev/null 2>&1; then
     setopt appendhistory
 fi
 
+# --- lazygit ---
 if command -v lazygit >/dev/null 2>&1; then
     alias g="lazygit"
 fi
 
+# --- Aliases ---
 alias nv="nvim"
 alias vim="nvim"
 alias vi="nvim"
@@ -44,54 +59,23 @@ alias ct="bash $HOME/.dotfiles/scripts/ct.sh"
 alias dotfiles='cd $HOME/.dotfiles && nv .'
 alias f='fzf | pbcopy'
 alias gr='go run main.go'
+alias ben="tmuxifier load-session"
 
-#tmuxifier
-export PATH="$HOME/.tmuxifier/bin:$PATH"
+# --- tmuxifier ---
 eval "$(tmuxifier init -)"
-
 if ! tmux ls &>/dev/null; then
     tmux start-server
 fi
 
+# --- Functions ---
 open-at-line() {
     nv $(rg --line-number . | fzf --delimiter ':' --preview 'bat --color=always --highlight-line {2} {1}' | awk -F ':' '{print "+"$2" "$1}')
 }
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-source /Users/cartrabbit/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-alias ben="tmuxifier load-session"
-export PATH="/Users/cartrabbit/.config/herd-lite/bin:$PATH"
-export PHP_INI_SCAN_DIR="/Users/cartrabbit/.config/herd-lite/bin:$PHP_INI_SCAN_DIR"
-
-export PATH=$PATH:/usr/local/go/bin
-export PATH=$PATH:$GOPATH/bin
-
-export EDITOR=nvim
-
-export $(grep -v '^#' ~/.dotfiles/.env | xargs)
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-export PATH="/opt/homebrew/opt/php@7.4/bin:$PATH"
-export PATH="/opt/homebrew/opt/php@7.4/sbin:$PATH"
-
+# --- Key bindings ---
 bindkey -v
-# Bind '/' to history search (like Vim's /)
-
 bindkey -M vicmd '/' vi-history-search-backward
 bindkey -M vicmd '?' vi-history-search-forward
-
-# function zle-keymap-select {
-#   if [[ $KEYMAP == vicmd ]]; then
-#     echo -ne "\033]0;-- NORMAL --\007"
-#   else
-#     echo -ne "\033]0;\007"
-#   fi
-# }
-# zle -N zle-keymap-select
 
 function zle-keymap-select {
   case $KEYMAP in
@@ -101,10 +85,18 @@ function zle-keymap-select {
   zle reset-prompt
 }
 zle -N zle-keymap-select
-
 precmd() { MODE_INDICATOR="%F{yellow}[CMD]%f" }
-
-# Add the indicator to your prompt
 PROMPT='${MODE_INDICATOR} %F{cyan}%~%f %# '
 
 
+
+# Herd injected PHP 8.4 configuration.
+export HERD_PHP_84_INI_SCAN_DIR="/Users/benittoraj42/Library/Application Support/Herd/config/php/84/"
+
+
+# Herd injected PHP binary.
+export PATH="/Users/benittoraj42/Library/Application Support/Herd/bin/":$PATH
+
+
+# Herd injected PHP 7.4 configuration.
+export HERD_PHP_74_INI_SCAN_DIR="/Users/benittoraj42/Library/Application Support/Herd/config/php/74/"
