@@ -18,13 +18,20 @@ opt.colorcolumn = "81" -- highlight the 81th column
 
 --Search Settings
 opt.ignorecase = true -- ignore case when searching
-opt.smartcase = true -- if you incluse mixed case in your search , asumes you want case-sensitive
+opt.smartcase = false -- if you incluse mixed case in your search , asumes you want case-sensitive
 
 --turn on termguicolors for tokonight colorschem to work
 -- (have touse iterm2 or any other true color termimal)
 opt.termguicolors = true
 opt.background = "dark" -- colorschemes that can be light or dark will be made dark
 opt.signcolumn = "yes" -- show sign column so that text doesn't shift
+
+-- Eye comfort settings for extended coding sessions
+opt.cursorline = true -- highlight current line for better focus
+opt.scrolloff = 8 -- keep 8 lines above/below cursor for context
+opt.sidescrolloff = 8 -- keep 8 columns left/right of cursor
+opt.updatetime = 250 -- faster completion and updates (default 4000ms)
+opt.timeoutlen = 300 -- faster key sequence completion
 
 -- backspace
 opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or insert mode start position
